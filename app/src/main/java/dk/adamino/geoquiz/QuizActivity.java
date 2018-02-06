@@ -2,6 +2,7 @@ package dk.adamino.geoquiz;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -9,6 +10,7 @@ import android.widget.Toast;
 
 public class QuizActivity extends AppCompatActivity {
 
+    public static final String TAG = "Adamino";
     private Button mTrueButton, mFalseButton ,mNextButton, mPrevButton;
     private TextView mQuestionTextView;
     private int mCurrentIndex = 0;
@@ -81,5 +83,35 @@ public class QuizActivity extends AppCompatActivity {
     private void updateQuestion() {
         int question = mQuestionBank[mCurrentIndex].getTextResId();
         mQuestionTextView.setText(question);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d(TAG, "onStart() called");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume() called");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause() called");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop() called");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy called");
     }
 }
