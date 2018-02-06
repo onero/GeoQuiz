@@ -16,4 +16,8 @@
     <string name="correct_toast">Correct!</string>
     <string name="incorrect_toast">Incorrect!</string>
     <string name="previous">Prev</string>
+    <string name="warning">Are you sure you want to do this?</string>
+    <string name="show_answer">Show Answer</string>
+    <string name="cheat">Cheat</string>
+    <string name="judgement">Cheating is wrong.</string>
 </resources>

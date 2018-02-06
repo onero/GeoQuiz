@@ -1,5 +1,6 @@
 package dk.adamino.geoquiz;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -12,9 +13,11 @@ public class QuizActivity extends AppCompatActivity {
 
     public static final String TAG = "Adamino";
     public static final String KEY_INDEX = "index";
-    private Button mTrueButton, mFalseButton ,mNextButton, mPrevButton;
+    public static final int REQUEST_CODE_CHEAT = 0;
+    private Button mTrueButton, mFalseButton ,mNextButton, mPrevButton, mCheatButton;
     private TextView mQuestionTextView;
     private int mCurrentIndex = 0;
+    private boolean mIsCheater;
 
     private Question[] mQuestionBank = new Question[]{
         new Question(R.string.question_australia, true),
@@ -40,6 +43,16 @@ public class QuizActivity extends AppCompatActivity {
         updateQuestion();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != RESULT_OK) return;
+
+        if (requestCode == QuizActivity.REQUEST_CODE_CHEAT) {
+            if (data == null) return;
+            mIsCheater = CheatActivity.wasAnswerShown(data);
+        }
+    }
+
     private void setupListeners() {
         mFalseButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,9 +71,18 @@ public class QuizActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
+                mIsCheater = false;
                 updateQuestion();
             }
         };
+        mCheatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean answerIsTrue = mQuestionBank[mCurrentIndex].isAnswerTrue();
+                Intent iSolemnlySwearImUpToNoGood = CheatActivity.newIntent(QuizActivity.this, answerIsTrue);
+                startActivityForResult(iSolemnlySwearImUpToNoGood, QuizActivity.REQUEST_CODE_CHEAT);
+            }
+        });
 
         mNextButton.setOnClickListener(nextQuestionListener);
         mQuestionTextView.setOnClickListener(nextQuestionListener);
@@ -79,6 +101,7 @@ public class QuizActivity extends AppCompatActivity {
         mFalseButton = findViewById(R.id.false_button);
         mNextButton = findViewById(R.id.next_button);
         mPrevButton = findViewById(R.id.previous_button);
+        mCheatButton = findViewById(R.id.btnCheat);
     }
 
     @Override
@@ -91,10 +114,14 @@ public class QuizActivity extends AppCompatActivity {
         boolean answerIsTrue = mQuestionBank[mCurrentIndex].isAnswerTrue();
 
         int messageResId = 0;
-
         messageResId = (userPressedTrue == answerIsTrue) ?
                 R.string.correct_toast :
                 R.string.incorrect_toast;
+
+        if (mIsCheater) {
+            messageResId = R.string.judgement;
+        }
+        
         Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show();
     }
 

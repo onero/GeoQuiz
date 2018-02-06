@@ -35,16 +35,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/previous"
-        android:layout_gravity="bottom|left"
+        android:layout_gravity="bottom|start"
         android:drawableLeft="@drawable/arrow_left"
         android:drawablePadding="4dp"/>
+
+    <Button
+        android:id="@+id/btnCheat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:text="@string/cheat"/>
 
     <Button
         android:id="@+id/next_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:drawablePadding="4dp"
-        android:layout_gravity="bottom|right"
+        android:layout_gravity="bottom|end"
         android:drawableRight="@drawable/arrow_right"
         android:text="@string/next_button"/>
 
