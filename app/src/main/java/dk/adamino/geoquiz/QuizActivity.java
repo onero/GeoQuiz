@@ -11,6 +11,7 @@ import android.widget.Toast;
 public class QuizActivity extends AppCompatActivity {
 
     public static final String TAG = "Adamino";
+    public static final String KEY_INDEX = "index";
     private Button mTrueButton, mFalseButton ,mNextButton, mPrevButton;
     private TextView mQuestionTextView;
     private int mCurrentIndex = 0;
@@ -28,16 +29,18 @@ public class QuizActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
 
-        mQuestionTextView = findViewById(R.id.question_text_view);
+        if (savedInstanceState != null) {
+            mCurrentIndex = savedInstanceState.getInt(KEY_INDEX);
+        }
 
-        mTrueButton = findViewById(R.id.true_button);
-        mTrueButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                checkAnswer(true);
-            }
-        });
-        mFalseButton = findViewById(R.id.false_button);
+        setupViews();
+
+        setupListeners();
+
+        updateQuestion();
+    }
+
+    private void setupListeners() {
         mFalseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -45,9 +48,12 @@ public class QuizActivity extends AppCompatActivity {
 
             }
         });
-        mNextButton = findViewById(R.id.next_button);
-        mPrevButton = findViewById(R.id.previous_button);
-
+        mTrueButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                checkAnswer(true);
+            }
+        });
         View.OnClickListener nextQuestionListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,8 +71,20 @@ public class QuizActivity extends AppCompatActivity {
                 updateQuestion();
             }
         });
+    }
 
-        updateQuestion();
+    private void setupViews() {
+        mQuestionTextView = findViewById(R.id.question_text_view);
+        mTrueButton = findViewById(R.id.true_button);
+        mFalseButton = findViewById(R.id.false_button);
+        mNextButton = findViewById(R.id.next_button);
+        mPrevButton = findViewById(R.id.previous_button);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(KEY_INDEX, mCurrentIndex);
     }
 
     private void checkAnswer(boolean userPressedTrue) {
