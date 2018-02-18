@@ -121,7 +121,7 @@ public class QuizActivity extends AppCompatActivity {
         if (mIsCheater) {
             messageResId = R.string.judgement;
         }
-        
+
         Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show();
     }
 
